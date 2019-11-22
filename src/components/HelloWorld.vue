@@ -1,12 +1,12 @@
 <template>
 	<div id="check">
-	<button @click="isDatePickerShow0=true">日选择器</button>
-	<button @click="isDatePickerShow1=true">月选择器</button>
+	<button @click="isDatePickerShow0=true">dayPicker</button>
+	<button @click="isDatePickerShow1=true">monthPicker</button>
 	<div class="showdata">
-	<span>当前选中：</span>
+	<span>currentPick：</span>
 	<span>{{datePickerValue}}</span>
 	</div>
-		<!-- 日期筛选器 -->
+		<!-- datePicker -->
 		<div class="datepick">
 			<md-picker
 				ref="picker0"
@@ -36,21 +36,13 @@ import {Picker} from "mand-mobile";
 // import checkList from "./components/checkList";
 import days from "./28day";
 export default {
-	//import引入的组件需要注入到对象中才能使用
+	//The imported components need to be injected into the object to be used.
 	components: {
-		// [TabBar.name]: TabBar,
-		// [Swiper.name]: Swiper,
-		// [SwiperItem.name]: SwiperItem,
-		[Picker.name]: Picker,
-		// [Icon.name]: Icon,
-		// [Toast.name]: Toast,
-		// checkList
+		[Picker.name]: Picker
 	},
 	data() {
-		//这里存放数据
+		// Store data here
 		return {
-			// 用户邮箱
-			// userMail:'',
 			// 所有日期数据
 			pickerData: [],
 			monthArray: new Array(12).fill(1).map((v, k) => {
@@ -69,21 +61,11 @@ export default {
 			minDate: new Date("2016/01/01"),
 			// 最大
 			maxDate: new Date(),
-			// 日结单数据渲染列表
-			// filterDayList: [],
-			// 日结单数据列表
-			// dataDayList: [],
-			// 月结单数据渲染列表
-			// filterMonthList: [],
-			// 月结单数据
-			// dataMonthList: [],
 			// 展示日期日选择器及格式
 			isDatePickerShow0: false,
 			isDatePickerShow1: false,
 			// 选中的日期
-			datePickerValue: "",
-			// currentTab: 0,
-			// items: [{name: 0, label: "日结单"}, {name: 1, label: "月结单"}]
+			datePickerValue: ""
 		};
 	},
 	//监听属性 类似于data概念
@@ -92,24 +74,6 @@ export default {
 	watch: {},
 	//方法集合
 	methods: {
-		// checklist.vue传更新的值
-		// updateList(val) {
-		// 	// debugger
-		// 	if (!this.currentTab) {
-		// 		this.filterDayList = val;
-		// 	} else {
-		// 		this.dataMonthList = [...this.dataMonthList, val];
-		// 	}
-		// },
-		// 初始化数据
-		// 		initList(){
-		// 			// this.$get(url,params).then(res=>...)
-		// this.dataDayList=[{date: "2019/10/30", user: "562001"}]
-		// 		},
-		// 返回上一层
-		// preback() {
-		// 	this.$router.back();
-		// },
 		// 选好日期后点击确定，筛选数据
 		onPickerConfirm(index) {
 			console.log("queren", this.pickerDefaultValue);
@@ -121,92 +85,12 @@ export default {
 			});
 			console.log(`[Mand Mobile] Picker getColumnValues: ${value.substr(0, value.length - 1)}`);
 			this.datePickerValue = value.substr(0, value.length - 1);
-			// 筛选日结单
-			// if (this.currentTab === 0) {
-			// 	let datePickerValue = value.substr(0, value.length - 1);
-			// 	console.log("1", datePickerValue);
-			// 	if (datePickerValue.includes("all")) {
-			// 		this.filterDayList = this.dataDayList;
-			// 	} else {
-			// 		this.filterDayList = this.dataDayList.filter((item, index) => {
-			// 			console.log(item.invoiceDate);
-			// 			return datePickerValue === item.invoiceDate;
-			// 		});
-			// 	}
-			// 	// 筛选月结单
-			// } else {
-			// 	let datePickerValue = value.substr(0, value.length - 1);
-			// 	if (datePickerValue.includes("all")) {
-			// 		this.filterMonthList = this.dataMonthList;
-			// 	} else {
-			// 		// datePickerValue=datePickerValue;
-			// 		console.log(datePickerValue);
-			// 		this.filterMonthList = this.dataMonthList.filter((item, index) => {
-			// 			console.log(item.invoiceDate);
-			// 			return item.invoiceDate.slice(0, item.invoiceDate.lastIndexOf("/")) === datePickerValue;
-			// 		});
-			// 	}
-			// }
 		},
 		getDatetime(dataTime) {
 			let month = dataTime.getMonth() + 1 < 10 ? String("0" + (dataTime.getMonth() + 1)) : String(dataTime.getMonth() + 1);
 			let date = dataTime.getDate() < 10 ? String("0" + dataTime.getDate()) : String(dataTime.getDate());
 			return [String(dataTime.getFullYear()), String(month), String(date)];
 		},
-		
-		// 获取结单
-		// getList(object){
-		// 	let startDate = this.getDatetime(this.minDate).join("");
-		// 	let endDate = this.getDatetime(this.maxDate).join("");
-		// 	this.$get("/market-quotation/stock/getStatement", {
-		// 		traceLogId: this.utils.randomstring(),
-		// 		// accountId:object.accountId,
-		// 		accountId: "M912668",
-		// 		startDate: startDate,
-		// 		endDate: endDate,
-		// 		// type:dairly||monthly
-		// 		type: object.type,
-		// 		limit: "20",
-		// 		page: "1"
-		// 	}).then(res => {
-		// 		if (res.success) {
-		// 			Toast.hide();
-		// 			res.result.list.forEach(item => {
-		// 				item.invoiceDate = this.utils.format(item.invoiceDate);
-		// 			});
-		// 			if(object.type=='dairly'){
-
-		// 			this.dataDayList = res.result.list;
-		// 			this.filterDayList = this.dataDayList;
-		// 			}else{
-		// 				this.dataMonthList = res.result.list;
-		// 			this.filterMonthList = this.dataMonthList;
-		// 			}
-		// 		}
-		// 	});
-		// },
-		// 初始化数据
-		// init() {
-			// Toast.loading("加载中...");
-			// ******
-			// this.dataDayList=[{invoiceDate:'2019/11/17',accountId:'12342'}]
-			// this.filterDayList = this.dataDayList;
-			// // 获取用户信息
-			// this.$get('/market-quotation/stock/getUserInfo',{
-			// 	accountId:'M912668'
-			// }).then(res=>{
-			// 	if(res.success){
-			// 		this.userMail = res.result.data.email
-			// 		console.log(this.userMail);
-			// 	}
-			// 	console.log(res,"countid");
-				
-			// })
-			// // 获取日结单
-			// this.getList({type:'dairly'})
-			// // 获取月结单
-			// this.getList({type:'monthly'})
-		// },
 		// 初始化日期
 		initDate() {
 			let pickerData = [];
@@ -275,33 +159,13 @@ export default {
 				}
 				pickerData.push(yearObj);
 			}
-			// for (let i = 0; i < pickerData.length; i++) {
-			// 	let yearNum = pickerData[i].value;
-			// 	if ((yearNum % 4 == 0 && yearNum % 100 != 0) || yearNum % 400 == 0) {
-			// 		console.log("yearNum,", yearNum);
-			// 		console.log(i);
-
-			// 		pickerData[0].children[1].children.push({label: "29日", value: "29"});
-			// 	}
-			// }
 			console.log(pickerData);
 			return [pickerData];
 		},
 		// 弹出日期筛选器
 		showPicker(val) {
-			// if (val == 0) {
 			this[`isDatePickerShow${val}`] = true;
-			// } else if (val == 1) {
-			// this.isDatePickerShow1 = true;
-			// }
 		},
-		// onSwiperChange(from, to) {
-		// 	this.currentTab = to;
-		// },
-		// // 切换tab页
-		// onTabChange(item, index) {
-		// 	this.$refs.swiper.goto(index);
-		// }
 	},
 	beforeCreate() {
 		setTimeout(() => {});
