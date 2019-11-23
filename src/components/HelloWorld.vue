@@ -85,6 +85,7 @@ export default {
 			});
 			console.log(`[Mand Mobile] Picker getColumnValues: ${value.substr(0, value.length - 1)}`);
 			this.datePickerValue = value.substr(0, value.length - 1);
+			this.$emit("pickdate",this.datePickerValue,index)
 		},
 		getDatetime(dataTime) {
 			let month = dataTime.getMonth() + 1 < 10 ? String("0" + (dataTime.getMonth() + 1)) : String(dataTime.getMonth() + 1);
